@@ -5,84 +5,90 @@ import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 import { Checkbox } from "@/ui/checkbox";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import type { ApiResponse } from "@/types/api";
-import type { RegisterData, RegisterPayload } from "@/types/auth";
-import { parseFieldErrors, useRegisterMutation } from "@/services/queries/auth.mutation";
-
+import {  Errors, RegisterPayload } from "@/features/auth/auth.type";
+import { useRegister } from "@/features/auth/hook/useRegister";
+import { useLogin } from "@/features/auth/hook/useLogin";
 
 type Mode = "signin" | "signup";
 
-type Errors = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  password?: string;
-  confirmPassword?: string;
-  form?: string;
-};
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [mode, setMode] = useState<Mode>("signin");
+  type Mode = "signin" | "signup";
 
+  const rawMode = searchParams.get("mode");
 
-  const [form, setForm] = useState<RegisterPayload>({
-    name: "",
+  const initialMode: Mode =
+    rawMode === "signup" ? "signup" : "signin";
+
+  const [mode, setMode] = useState<Mode>(initialMode);
+
+  const formInitData : RegisterPayload = {
+        name: "",
     email: "",
     phone: "",
     password: "",
     confirmPassword: "",
-  });
+  }
+
+  const [form, setForm] = useState<RegisterPayload>(formInitData);
 
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
-  const registerMutation = useRegisterMutation();
+
+  const registerMutation = useRegister(setErrors);
+  const loginMutation = useLogin();
 
   const clearError = (key: keyof Errors) => {
     if (!errors[key]) return;
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-const validate = () => {
-  const newErrors: Errors = {};
-  const isSignup = mode === "signup";
+  const clearForm = () =>{
+    setForm(formInitData);
+  }
 
-  const signupFields: readonly (keyof RegisterPayload)[] = [
-    "name",
-    "phone",
-    "confirmPassword",
-  ];
+  const validate = () => {
+    const newErrors: Errors = {};
+    const isSignup = mode === "signup";
 
-  const requiredFields: (keyof RegisterPayload)[] = [
-    "email",
-    "password",
-    ...(isSignup ? signupFields : []),
-  ];
+    const signupFields: readonly (keyof RegisterPayload)[] = [
+      "name",
+      "phone",
+      "confirmPassword",
+    ];
+
+    const requiredFields: (keyof RegisterPayload)[] = [
+      "email",
+      "password",
+      ...(isSignup ? signupFields : []),
+    ];
+
     requiredFields.forEach((field) => {
       if (!form[field].trim()) {
         newErrors[field as keyof Errors] = "Field wajib diisi";
       }
     });
 
-  if (
-    isSignup &&
-    form.password &&
-    form.confirmPassword &&
-    form.password !== form.confirmPassword
-  ) {
-    newErrors.confirmPassword = "Confirm Password tidak sama";
-  }
+    if (
+      isSignup &&
+      form.password &&
+      form.confirmPassword &&
+      form.password !== form.confirmPassword
+    ) {
+      newErrors.confirmPassword = "Confirm Password tidak sama";
+    }
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
 
-  const handleChange =
-    (key: keyof RegisterPayload) =>
+  const handleChange = (key: keyof RegisterPayload) =>
       (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({
           ...prev,
@@ -93,40 +99,7 @@ const validate = () => {
         clearError("form");
       };
 
-  const onRegister = async () => {
-        try {
-      const res = (await registerMutation.mutateAsync(form)) as ApiResponse<RegisterData>;
 
-      if (!res.success) {
-        setErrors((prev) => ({ ...prev, form: res.message || "Register gagal" }));
-        return;
-      }
-      router.push("/");
-    } catch (err) {
-      const { fieldErrors, formError } = parseFieldErrors(err);
-
-      const newErrors: Errors = {};
-
-      if (fieldErrors) {
-
-        for (const [key, message] of Object.entries(fieldErrors)) {
-          if (key === "name") newErrors.name = message;
-          if (key === "email") newErrors.email = message;
-          if (key === "phone") newErrors.phone = message;
-          if (key === "password") newErrors.password = message;
-          if (key === "confirmPassword") newErrors.confirmPassword = message;
-        }
-
-        setErrors(newErrors);
-        return;
-      }
-
-      if (formError) {
-        newErrors.form = formError;
-        setErrors(newErrors);
-      }
-    }
-  }
 
   const handleSubmit = async () => {
     setErrors((prev) => ({ ...prev, form: undefined }));
@@ -136,12 +109,13 @@ const validate = () => {
 
 
     if (mode === "signin") {
-      router.push("/");
+      loginMutation.mutateAsync(form)
       return;
     }
 
-    if (mode === 'signup'){
-      onRegister();
+    if (mode === 'signup') {
+      await registerMutation.submitRegister(form);
+      return;
     }
 
   };
@@ -185,6 +159,7 @@ const validate = () => {
               onClick={() => {
                 setMode("signin");
                 setErrors({});
+                clearForm();
               }}
             >
               Sign in
@@ -202,6 +177,7 @@ const validate = () => {
               onClick={() => {
                 setMode("signup");
                 setErrors({});
+                clearForm();
               }}
             >
               Sign up

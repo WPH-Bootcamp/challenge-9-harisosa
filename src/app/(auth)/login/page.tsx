@@ -5,21 +5,17 @@ import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 import { Checkbox } from "@/ui/checkbox";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-import {  Errors, RegisterPayload } from "@/features/auth/auth.type";
-import { useRegister } from "@/features/auth/hook/useRegister";
-import { useLogin } from "@/features/auth/hook/useLogin";
+import {  Errors, RegisterPayload } from "@/types/auth";
+import { useRegister } from "@/services/queries/useRegister";
+import { useLogin } from "@/services/queries/useLogin";
 
 type Mode = "signin" | "signup";
 
 
 export default function LoginPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-
-  type Mode = "signin" | "signup";
-
   const rawMode = searchParams.get("mode");
 
   const initialMode: Mode =
@@ -120,6 +116,13 @@ export default function LoginPage() {
 
   };
 
+  const isSubmitting = mode === "signin" ? loginMutation.isPending: registerMutation.isPending;
+
+  const submitLabel = isSubmitting
+    ? "Loading..."
+    : mode === "signin"
+      ? "Login"
+      : "Register";
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white">
       <div className="relative hidden lg:block">
@@ -270,13 +273,9 @@ export default function LoginPage() {
           <Button
             className="w-full bg-red-600 hover:bg-red-700"
             onClick={handleSubmit}
-            disabled={registerMutation.isPending}
+            disabled={registerMutation.isPending || loginMutation.isPending}
           >
-            {mode === "signin"
-              ? "Login"
-              : registerMutation.isPending
-                ? "Registering..."
-                : "Register"}
+            {submitLabel}
           </Button>
         </div>
       </div>

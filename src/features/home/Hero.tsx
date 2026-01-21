@@ -1,3 +1,5 @@
+"use client";
+
 export default function HomeHero() {
   return (
     <section className="relative h-206.75 w-full overflow-hidden">

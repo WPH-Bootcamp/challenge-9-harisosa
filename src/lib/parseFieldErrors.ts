@@ -1,5 +1,6 @@
 import axios from "axios";
-import { AuthErrorResponse, FieldError } from "../auth.type";
+import { Errors, AuthErrorResponse, FieldError } from "@/types/auth";
+
 
 export function parseFieldErrors(err: unknown): {
   fieldErrors?: Record<string, string>;
@@ -40,4 +41,32 @@ export function parseFieldErrors(err: unknown): {
   return { formError: "Request failed" };
 }
 
+
+
+export const mapAuthFieldErrorsToErrors =(
+  fieldErrors?: Record<string, string>
+): Errors => {
+  const e: Errors = {};
+  if (!fieldErrors) return e;
+
+  for (const [key, message] of Object.entries(fieldErrors)) {
+    if (key === "name") e.name = message;
+    if (key === "email") e.email = message;
+    if (key === "phone") e.phone = message;
+    if (key === "password") e.password = message;
+    if (key === "confirmPassword") e.confirmPassword = message;
+  }
+  return e;
+}
+
+
+
+
+export const parseAuthFormErrors = (err: unknown): Errors => {
+  const { fieldErrors, formError } = parseFieldErrors(err);
+  return {
+    ...mapAuthFieldErrorsToErrors(fieldErrors),
+    ...(formError ? { form: formError } : {}),
+  };
+}
 

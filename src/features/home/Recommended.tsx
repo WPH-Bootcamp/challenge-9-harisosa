@@ -1,17 +1,15 @@
 "use client";
 
-import RestaurantCard, { RestaurantVM } from "./RestaurantCard";
+import { useRecommendations } from "@/services/queries/useRecommendations";
+import { RestaurantCard } from "../../components/RestaurantCard";
+import { Skeleton } from "@/ui/skeleton";
 
-const MOCK_DATA: RestaurantVM[] = Array.from({ length: 12 }).map((_, i) => ({
-  id: String(i),
-  name: "Burger King",
-  rating: 4.9,
-  location: "Jakarta Selatan",
-  distanceKm: 2.4,
-  logo: "/images/mock/burger-king.png",
-}));
 
-export default function Recommended() {
+export const Recommended : React.FC = () => {
+  const { data, isLoading, isError } = useRecommendations();
+
+  const recommendations = data?.data.recommendations ?? [];
+
   return (
     <section className="mx-auto max-w-6xl px-4 pb-12">
       {/* Header */}
@@ -24,27 +22,43 @@ export default function Recommended() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {MOCK_DATA.map((item) => (
-          <RestaurantCard key={item.id} data={item} />
-        ))}
+        {isLoading &&
+          Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-xl border p-4 space-y-3"
+            >
+              <Skeleton className="h-40 w-full rounded-lg" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          ))}
+
+        {!isLoading &&
+          !isError &&
+          recommendations.map((item) => (
+            <RestaurantCard key={item.id} data={item}/>
+          ))}
       </div>
 
       {/* Show More */}
-      <div className="mt-10 flex justify-center">
-        <button
-          type="button"
-          className="
-            h-10 rounded-full bg-white px-10
-            text-sm font-medium text-black/70
-            border border-black/10
-            shadow-sm
-            hover:bg-black/2
-            transition
-          "
-        >
-          Show More
-        </button>
-      </div>
+      {!isLoading && !isError && recommendations.length > 0 && (
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            className="
+              h-10 rounded-full bg-white px-10
+              text-sm font-medium text-black/70
+              border border-black/10
+              shadow-sm
+              hover:bg-black/2
+              transition
+            "
+          >
+            Show More
+          </button>
+        </div>
+      )}
     </section>
   );
 }

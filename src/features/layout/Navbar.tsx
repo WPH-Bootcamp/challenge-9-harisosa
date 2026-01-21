@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import GuestNav from "./GuestNav";
-import AuthedNav from "./AuthNav";
-import { useAppSelector } from "store/hook";
+import { GuestNav } from "./GuestNav";
+import { AuthedNav } from "./AuthNav";
+import { useAppSelector } from "@/features/store/hook";
 import { selectIsLoggedIn } from "../auth/auth.selector";
 
 export default function Navbar() {
@@ -30,11 +30,11 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 w-full transition-colors duration-200",
         scrolled
-          ? "bg-white"
+          ? "bg-white text-black"
           : "bg-transparent border-b border-transparent"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4.75">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src={scrolled? '/images/logo-color.svg' : '/images/logo.svg'}
@@ -46,7 +46,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-3">
-          {isLoggedIn ? <AuthedNav /> : <GuestNav />}
+          {isLoggedIn ? <AuthedNav scrolled={scrolled} /> : <GuestNav scrolled={scrolled} />}
         </div>
       </div>
     </header>

@@ -2,15 +2,14 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "store/hook";
+import { useAppDispatch } from "@/features/store/hook";
 
-import { register } from "../api/auth.api";
-import { setSession } from "../auth.slice";
-import { parseFieldErrors } from "../utlis/parseFieldErrors";
+import { register } from "../api/auth";
+import { setSession } from "../../features/auth/auth.slice";
+import { mapAuthFieldErrorsToErrors, parseFieldErrors } from "../../lib/parseFieldErrors";
 
 import type { ApiResponse } from "@/types/api";
-import type { AuthData, Errors, RegisterPayload } from "../auth.type";
-import { mapAuthFieldErrorsToErrors } from "../utlis/mapAuthFieldErrorsToErrors";
+import type { AuthData, Errors, RegisterPayload } from "../../types/auth";
 
 type SetErrors = React.Dispatch<React.SetStateAction<Errors>>;
 

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ShoppingBag, LogOut, User as UserIcon, Badge } from "lucide-react"
+import { ShoppingBag, LogOut, User as UserIcon } from "lucide-react"
 
 
 import {
@@ -15,9 +15,14 @@ import {
 
 import { Button } from "@/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
-import { useAppDispatch, useAppSelector } from "store/hook"
+import { useAppDispatch, useAppSelector } from "@/features/store/hook"
 import { clearSession } from "../auth/auth.slice"
 import { selectUserName, selectAvatarUrl } from "../auth/auth.selector"
+import Image from "next/image"
+import { Badge } from "@/ui/badge"
+import React from "react"
+import { cn } from "@/lib/utils"
+import { Icon } from "@/ui/icon"
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -26,7 +31,11 @@ function initials(name: string) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
 
-export default function AuthedNav() {
+type AuthedNavProps = {
+  scrolled : boolean
+}
+
+export const AuthedNav : React.FC<AuthedNavProps> = ({scrolled}) => {
   const dispatch = useAppDispatch()
   const name = useAppSelector(selectUserName)
   const avatarUrl = useAppSelector(selectAvatarUrl)
@@ -38,29 +47,34 @@ export default function AuthedNav() {
 
   return (
     <div className="flex items-center gap-2">
-      {/* Cart */}
       <Link href="/cart" className="relative">
         <Button variant="ghost" size="icon" aria-label="Open cart">
-          <ShoppingBag className="h-5 w-5" />
+          <Icon name="bag" className={cn("size-7",
+
+            scrolled ? 'text-black' : 'text-white'
+
+          )}/>
         </Button>
 
           <span className="absolute -right-1 -top-1">
-            <Badge className="h-5 min-w-5 justify-center px-1 text-[11px]">
+            <Badge className="h-5 min-w-5 justify-center px-1 text-[11px] bg-red-600">
               1
             </Badge>
           </span>
 
       </Link>
 
-      {/* Avatar dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-white/10 transition-colors">
-            <Avatar className="h-8 w-8">
-              {avatarUrl ? <AvatarImage src={avatarUrl} alt={name} /> : null}
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={avatarUrl ?? '/images/avatar.svg'} alt={name} />
               <AvatarFallback>{initials(name || "User")}</AvatarFallback>
             </Avatar>
-            <span className="hidden sm:block text-white text-sm">
+            <span className={cn(
+              "hidden sm:block text-lg font-normal",
+              scrolled ? "text-black" : "text-white"
+              )}>
               {name || "User"}
             </span>
           </button>

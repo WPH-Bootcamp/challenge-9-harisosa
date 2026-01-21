@@ -1,4 +1,4 @@
-import { RootState } from "store"
+import { RootState } from "@/features/store"
 
 export const selectAuth = (s: RootState) => s.auth
 export const selectUser = (s: RootState) => s.auth.user

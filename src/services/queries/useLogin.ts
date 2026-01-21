@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "store/hook";
-import { AuthData, LoginPayload } from "../auth.type";
-import { login } from "../api/auth.api";
+import { useAppDispatch } from "@/features/store/hook";
+import { AuthData, LoginPayload } from "@/types/auth";
 import { ApiResponse } from "@/types/api";
-import { setSession } from "../auth.slice";
-import { parseFieldErrors } from "../utlis/parseFieldErrors";
+import { parseFieldErrors } from "@/lib/parseFieldErrors";
+import { setSession } from "@/features/auth/auth.slice";
+import { login } from "../api/auth";
 
 
 

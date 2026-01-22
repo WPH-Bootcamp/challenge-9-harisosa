@@ -9,12 +9,16 @@ import { GuestNav } from "./GuestNav";
 import { AuthedNav } from "./AuthNav";
 import { useAppSelector } from "@/features/store/hook";
 import { selectIsLoggedIn } from "../auth/auth.selector";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
+  const isHome = pathname === "/";
+  const isNavbarWhite = !isHome || scrolled;
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 8);
@@ -29,15 +33,15 @@ export default function Navbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 w-full transition-colors duration-200",
-        scrolled
-          ? "bg-white text-black"
+        isNavbarWhite
+          ? "bg-white text-black boarder-b shadow-[0_4px_12px_rgba(203,202,202,0.25)]"
           : "bg-transparent border-b border-transparent"
       )}
     >
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4.75">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src={scrolled? '/images/logo-color.svg' : '/images/logo.svg'}
+            src={isNavbarWhite?  '/images/logo-color.svg' : '/images/logo.svg'}
             alt="logo-brand"
             width={129}
             height={50}
@@ -46,7 +50,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-3">
-          {isLoggedIn ? <AuthedNav scrolled={scrolled} /> : <GuestNav scrolled={scrolled} />}
+          {isLoggedIn ? <AuthedNav isNavbarWhite={isNavbarWhite} /> : <GuestNav isNavbarWhite={isNavbarWhite} />}
         </div>
       </div>
     </header>

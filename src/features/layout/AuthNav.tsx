@@ -32,10 +32,10 @@ function initials(name: string) {
 }
 
 type AuthedNavProps = {
-  scrolled : boolean
+  isNavbarWhite : boolean
 }
 
-export const AuthedNav : React.FC<AuthedNavProps> = ({scrolled}) => {
+export const AuthedNav : React.FC<AuthedNavProps> = ({isNavbarWhite}) => {
   const dispatch = useAppDispatch()
   const name = useAppSelector(selectUserName)
   const avatarUrl = useAppSelector(selectAvatarUrl)
@@ -51,7 +51,7 @@ export const AuthedNav : React.FC<AuthedNavProps> = ({scrolled}) => {
         <Button variant="ghost" size="icon" aria-label="Open cart">
           <Icon name="bag" className={cn("size-7",
 
-            scrolled ? 'text-black' : 'text-white'
+            isNavbarWhite ? 'text-black' : 'text-white'
 
           )}/>
         </Button>
@@ -73,7 +73,7 @@ export const AuthedNav : React.FC<AuthedNavProps> = ({scrolled}) => {
             </Avatar>
             <span className={cn(
               "hidden sm:block text-lg font-normal",
-              scrolled ? "text-black" : "text-white"
+              isNavbarWhite ? "text-black" : "text-white"
               )}>
               {name || "User"}
             </span>

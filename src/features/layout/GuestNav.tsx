@@ -6,16 +6,16 @@ import Link from "next/link"
 import React from "react"
 
 type GuestNavProps = {
-  scrolled : boolean
+  isNavbarWhite : boolean
 }
 
-export const GuestNav : React.FC<GuestNavProps> =({scrolled}) => {
+export const GuestNav : React.FC<GuestNavProps> =({isNavbarWhite}) => {
   return (
     <div className="flex items-center gap-2">
       <Link href="/login?mode=signin">
         <Button variant="outline" size="lg" className={
           cn("bg-transparent lg:w-40.75 rounded-full",
-          scrolled ? "text-black": "text-white"
+          isNavbarWhite ? "text-black": "text-white"
           )}>
           Sign In
         </Button>

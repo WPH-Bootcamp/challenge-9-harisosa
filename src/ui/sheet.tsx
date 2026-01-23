@@ -50,8 +50,18 @@ function SheetContent({
   side = "right",
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "top" | "right" | "bottom" | "left"
+  side?: "top" | "right" | "bottom" | "left";
 }) {
+  const hasTitle = React.Children.toArray(children).some((child) => {
+    if (!React.isValidElement(child)) return false;
+
+    // `type` di ReactElement itu `string | JSXElementConstructor<any>`
+    // Di sini kita bandingin secara referensi (valid untuk component/function)
+    const childType = child.type;
+
+    return childType === SheetTitle || childType === SheetPrimitive.Title;
+  });
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -71,15 +81,23 @@ function SheetContent({
         )}
         {...props}
       >
+        {!hasTitle ? (
+          <SheetPrimitive.Title className="sr-only">
+            Sheet
+          </SheetPrimitive.Title>
+        ) : null}
+
         {children}
+
         <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
           <XIcon className="size-4" />
           <span className="sr-only">Close</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>
-  )
+  );
 }
+
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (

@@ -32,7 +32,7 @@ export function useCartActions() {
     }
 
     for (const g of groups) {
-      const found = g.items?.find((it) => it.menuId === menuId);
+      const found = g.items?.find((it) => it.menu.id === menuId);
       if (found?.id != null) return found.id;
     }
 
@@ -61,7 +61,6 @@ export function useCartActions() {
     const selectedRestaurant = restaurantId ?? currentRestaurantId;
     if (!selectedRestaurant) return;
 
-    console.log(menuId)
     const cartItemId = getCartItemId(menuId);
     if (cartItemId == null) return;
 

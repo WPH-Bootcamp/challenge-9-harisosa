@@ -10,3 +10,4 @@ export * from './useRegister';
 export * from './useRestaurantDetail';
 export * from './useRestaurants';
 export * from './useUpdateCart';
+export * from './useCheckoutOrder';

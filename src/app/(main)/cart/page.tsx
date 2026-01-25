@@ -1,6 +1,6 @@
 "use client";
 
-import { CartGroup } from "@/features/cart/CartGroup";
+import { CartGroup } from "@/components/CartGroup";
 import { selectCartData } from "@/features/cart/store";
 import { useSelector } from "react-redux";
 

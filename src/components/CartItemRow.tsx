@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
 import { CartItem } from "@/types";
-import { useCartActions } from "./store";
+import { useCartActions } from "../features/cart/store";
 import { currencyFormatter } from "@/lib/currencyFormatter";
 
 type CartItemRowProps = {
@@ -14,8 +14,6 @@ type CartItemRowProps = {
 export const CartItemRow : React.FC<CartItemRowProps> = ({item, restaurantId}) => {
   const {menu,quantity} = item;
   const { increase, decrease } = useCartActions(); 
-
-
   return (
     <div className="mb-4 flex items-center gap-3">
       <Image
@@ -34,7 +32,7 @@ export const CartItemRow : React.FC<CartItemRowProps> = ({item, restaurantId}) =
       <div className="flex items-center gap-2">
         <button className="flex h-7 w-7 items-center justify-center rounded-full border" onClick={()=> {
           decrease({
-            menuId: item.id, 
+            menuId: menu.id, 
             currentQty:item.quantity, 
             restaurantId})
         }}>

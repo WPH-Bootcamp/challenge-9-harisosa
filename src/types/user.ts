@@ -7,4 +7,5 @@ export type User = {
   latitude?: number;
   longitude?: number;
   createdAt: string;
+  address: string;
 };

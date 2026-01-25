@@ -20,6 +20,10 @@ const authSlice = createSlice({
       state.user = null
       state.token = null
     },
+  setAddress: (state, action: PayloadAction<string | null>) => {
+        if (!state.user) return; // belum login
+        state.user.address = action.payload ?? '';
+      },
   },
 })
 

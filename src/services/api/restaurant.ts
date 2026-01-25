@@ -8,7 +8,6 @@ export const restaurantApi = {
     const res = await api.get<ApiResponse<RecommendedCollection>>(
       "/resto/recommended"
     );
-    console.log(res.data)
     return res;
   },
 

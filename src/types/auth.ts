@@ -16,6 +16,8 @@ export interface RegisterPayload extends LoginPayload {
   name: string;
   phone: string;
   confirmPassword: string;
+  long: number;
+  lat: number;
 };
 
 
@@ -36,5 +38,7 @@ export type Errors = {
   phone?: string;
   password?: string;
   confirmPassword?: string;
+  long?: string;
+  lat?: string;
   form?: string;
 };

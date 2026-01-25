@@ -3,7 +3,7 @@ import { persistReducer, persistStore } from "redux-persist"
 import storage from "redux-persist/lib/storage"
 
 import authReducer from "@/features/auth/auth.slice"
-import cartReducer from "@/features/cart/cart.slice"
+import cartReducer from "@/features/cart/store/cart.slice"
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "restaurant-web",
   storage,
-  whitelist: ["auth", "cart"],
+  whitelist: ["auth"],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -22,7 +22,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // redux-persist needs this
+      serializableCheck: false,
     }),
 })
 

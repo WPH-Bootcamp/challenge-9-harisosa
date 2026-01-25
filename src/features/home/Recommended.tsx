@@ -8,7 +8,7 @@ import { Skeleton } from "@/ui/skeleton";
 export const Recommended : React.FC = () => {
   const { data, isLoading, isError } = useRecommendations();
 
-  const recommendations = data?.data.recommendations ?? [];
+  const recommendations = data?.data?.data?.recommendations ?? [];
 
   return (
     <section className="mx-auto max-w-6xl px-4 pb-12">

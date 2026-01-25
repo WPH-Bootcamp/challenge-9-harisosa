@@ -1,5 +1,6 @@
 "use client";
 
+import { cartActions } from "@/features/cart/store/cart.slice";
 import { RestaurantHeader } from "@/features/restaurant/RestaurantHeader";
 import { RestaurantHeroGallery } from "@/features/restaurant/RestaurantHero";
 import { RestaurantTabs } from "@/features/restaurant/RestaurantTab";
@@ -7,11 +8,22 @@ import { ReviewSection } from "@/features/restaurant/ReviewSection";
 import { useRestaurantDetail } from "@/services/queries/useRestaurantDetail";
 import { Separator } from "@/ui/separator";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export default function RestaurantDetailPage() {
   const params = useParams<{ id: string }>();
   const id = params.id;
   const { data, isLoading, isError } = useRestaurantDetail(id);
+
+   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(cartActions.setCurrentRestaurantId(Number(id)));
+    return () => {
+      dispatch(cartActions.setCurrentRestaurantId(null));
+    };
+  }, [dispatch, id]);
 
   if (isLoading) return <div className="p-6">Loading...</div>;
   if (isError || !data) return <div className="p-6">Gagal load restaurant detail.</div>;

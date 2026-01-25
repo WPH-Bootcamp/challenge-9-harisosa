@@ -23,7 +23,6 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = (props) => {
       onClick={onClickRestaurant}
     >
       <div className="flex items-center gap-4">
-        {/* Logo */}
         <div className="relative h-30 w-30 shrink-0 overflow-hidden rounded-xl">
           <Image
             src={logo}
@@ -32,8 +31,6 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = (props) => {
             className="object-contain w-full"
           />
         </div>
-
-        {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="truncate text-lg font-semibold text-black">
             {name}

@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./queryKey";
-import { getBestSeller } from "../api/resto";
+import { restaurantApi } from "../api";
 
 export function useBestSellerRestaurants(
   page: number = 1,
@@ -11,7 +11,7 @@ export function useBestSellerRestaurants(
 ) {
   return useQuery({
     queryKey: queryKeys.collections.bestSeller(page, limit),
-    queryFn: () => getBestSeller(page, limit),
+    queryFn: () =>  restaurantApi.getBestSeller(page, limit),
     enabled,
     staleTime: 1000 * 60 * 2,
   });

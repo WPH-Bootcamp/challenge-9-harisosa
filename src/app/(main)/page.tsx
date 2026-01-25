@@ -1,6 +1,8 @@
+'use client'
+
 import Categories from "@/features/home/Categories";
 import Hero from "@/features/home/Hero";
-import {Recommended} from "@/features/home/Recommended";
+import { Recommended } from "@/features/home/Recommended";
 
 
 export default function HomePage() {

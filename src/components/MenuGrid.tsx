@@ -4,11 +4,11 @@
 import { MenuItem } from "@/types/menuItem";
 import { MenuCard } from "./MenuCard";
 
-type Props = {
+type MenuGridProps = {
   menus: MenuItem[];
 };
 
-export function MenuGrid({ menus }: Props) {
+export function MenuGrid({ menus }: MenuGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {menus.map((m) => (

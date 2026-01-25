@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./queryKey";
-import { getNearBy } from "../api/resto";
+import { restaurantApi } from "../api";
 
 
 export function useNearbyRestaurants(
@@ -12,7 +12,7 @@ export function useNearbyRestaurants(
 ) {
   return useQuery({
     queryKey: queryKeys.collections.nearby(page, limit),
-    queryFn: () => getNearBy(page, limit),
+    queryFn: () => restaurantApi.getNearBy(page, limit),
     enabled,
     staleTime: 1000 * 60 * 2, 
   });

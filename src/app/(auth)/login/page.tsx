@@ -4,49 +4,62 @@ import Image from "next/image";
 import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 import { Checkbox } from "@/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import {  Errors, RegisterPayload } from "@/types/auth";
+import { Errors, RegisterPayload } from "@/types/auth";
 import { useRegister } from "@/services/queries/useRegister";
 import { useLogin } from "@/services/queries/useLogin";
 
 type Mode = "signin" | "signup";
 
-
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const rawMode = searchParams.get("mode");
 
-  const initialMode: Mode =
-    rawMode === "signup" ? "signup" : "signin";
-
+  const initialMode: Mode = rawMode === "signup" ? "signup" : "signin";
   const [mode, setMode] = useState<Mode>(initialMode);
 
-  const formInitData : RegisterPayload = {
-        name: "",
+  const formInitData: RegisterPayload = {
+    name: "",
     email: "",
     phone: "",
     password: "",
     confirmPassword: "",
-  }
+    long: 0,
+    lat: 0,
+  };
 
   const [form, setForm] = useState<RegisterPayload>(formInitData);
-
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   const registerMutation = useRegister(setErrors);
   const loginMutation = useLogin();
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const long = pos.coords.longitude;
+        const lat = pos.coords.latitude;
+
+        setForm((prev) => ({ ...prev, long, lat }));
+      },
+    );
+  }, []);
+
   const clearError = (key: keyof Errors) => {
     if (!errors[key]) return;
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  const clearForm = () =>{
-    setForm(formInitData);
-  }
+  const clearForm = () => {
+    setForm((prev) => ({
+      ...formInitData,
+      long: prev.long,
+      lat: prev.lat,
+    }));
+  };
 
   const validate = () => {
     const newErrors: Errors = {};
@@ -65,7 +78,7 @@ export default function LoginPage() {
     ];
 
     requiredFields.forEach((field) => {
-      if (!form[field].trim()) {
+      if (!form[field]) {
         newErrors[field as keyof Errors] = "Field wajib diisi";
       }
     });
@@ -83,19 +96,16 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleChange =
+    (key: keyof RegisterPayload) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({
+        ...prev,
+        [key]: e.target.value,
+      }));
 
-  const handleChange = (key: keyof RegisterPayload) =>
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm((prev) => ({
-          ...prev,
-          [key]: e.target.value,
-        }));
-
-        clearError(key);
-        clearError("form");
-      };
-
-
+      clearError(key as keyof Errors);
+      clearError("form");
+    };
 
   const handleSubmit = async () => {
     setErrors((prev) => ({ ...prev, form: undefined }));
@@ -103,26 +113,26 @@ export default function LoginPage() {
     const ok = validate();
     if (!ok) return;
 
-
     if (mode === "signin") {
-      loginMutation.mutateAsync(form)
+      await loginMutation.mutateAsync(form);
       return;
     }
 
-    if (mode === 'signup') {
+    if (mode === "signup") {
       await registerMutation.submitRegister(form);
       return;
     }
-
   };
 
-  const isSubmitting = mode === "signin" ? loginMutation.isPending: registerMutation.isPending;
+  const isSubmitting =
+    mode === "signin" ? loginMutation.isPending : registerMutation.isPending;
 
   const submitLabel = isSubmitting
     ? "Loading..."
     : mode === "signin"
-      ? "Login"
-      : "Register";
+    ? "Login"
+    : "Register";
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white">
       <div className="relative hidden lg:block">
@@ -267,8 +277,9 @@ export default function LoginPage() {
               </label>
             </div>
           )}
-
-          {errors.form && <p className="text-sm text-red-500">{errors.form}</p>}
+          {errors.form && (
+            <p className="text-sm text-red-500">{errors.form}</p>
+          )}
 
           <Button
             className="w-full bg-red-600 hover:bg-red-700"

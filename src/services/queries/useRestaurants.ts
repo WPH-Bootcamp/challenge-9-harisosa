@@ -4,7 +4,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { SearchFilters } from "@/types/filter";
 import { queryKeys } from "./queryKey";
-import { getRestaurants } from "../api/resto";
+import { restaurantApi } from "../api";
 
 export function useRestaurants(
   filters: SearchFilters,
@@ -12,7 +12,7 @@ export function useRestaurants(
 ) {
   return useQuery({
     queryKey: queryKeys.restaurant.list(filters),
-    queryFn: () => getRestaurants(filters),
+    queryFn: () => restaurantApi.getRestaurants(filters),
     enabled: opts?.enabled ?? true,
     staleTime: 1000 * 60 * 2,
   });

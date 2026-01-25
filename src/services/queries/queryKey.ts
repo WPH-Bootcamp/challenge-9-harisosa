@@ -1,6 +1,7 @@
 export const queryKeys = {
   // root
   all: ["restaurant"] as const,
+
   collections: {
     all: () => [...queryKeys.all, "collections"] as const,
 
@@ -13,21 +14,34 @@ export const queryKeys = {
     bestSeller: (page: number, limit: number) =>
       [...queryKeys.collections.all(), "best-seller", page, limit] as const,
   },
+
   menu: {
     all: () => [...queryKeys.all, "menu"] as const,
+
     list: (params: { q?: string; category?: string; sort?: string }) =>
       [...queryKeys.menu.all(), "list", params] as const,
+
     detail: (id: number | string) =>
       [...queryKeys.menu.all(), "detail", id] as const,
   },
+
   restaurant: {
     list: (params: Record<string, unknown>) =>
       [...queryKeys.all, "list", params] as const,
-    detail: (id: number | string) => [...queryKeys.all, "detail", id] as const,
+
+    detail: (id: number | string) =>
+      [...queryKeys.all, "detail", id] as const,
   },
+
   orders: {
     all: () => [...queryKeys.all, "orders"] as const,
+
     history: (userId: string) =>
       [...queryKeys.orders.all(), "history", userId] as const,
+  },
+
+  cart: {
+    all: () => [...queryKeys.all, "cart"] as const,
+    detail: () => [...queryKeys.cart.all(), "detail"] as const,
   },
 } as const;

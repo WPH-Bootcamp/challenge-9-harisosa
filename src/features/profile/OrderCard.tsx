@@ -4,6 +4,7 @@ import { Button } from "@/ui/button";
 import { Card, CardContent } from "@/ui/card";
 import Image from "next/image";
 import React from "react";
+import { ReviewDialog } from "../review/ReviewPopUp";
 
 type OrderCardProps = {
     order: MyOrder;
@@ -12,10 +13,11 @@ type OrderCardProps = {
 export const OrderCard: React.FC<OrderCardProps> = ({ order }: { order: MyOrder }) => {
     const firstRestaurant = order.restaurants[0];
     const restaurant = firstRestaurant.restaurant;
+    const [open, setOpen] = React.useState(false);
 
 
     return (
-        <Card className="rounded-2xl border shadow-sm">
+        <><Card className="rounded-2xl border shadow-sm">
             <CardContent className="p-5">
                 <div className="flex items-center gap-3">
                     <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-muted">
@@ -24,8 +26,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }: { order: MyOrder 
                             alt={restaurant.name}
                             width={32}
                             height={32}
-                            className="object-cover"
-                        />
+                            className="object-cover" />
                     </div>
                     <div className="font-semibold">{restaurant.name}</div>
                 </div>
@@ -39,8 +40,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }: { order: MyOrder 
                                     alt={item.menuName}
                                     width={80}
                                     height={80}
-                                    className="object-cover"
-                                />
+                                    className="object-cover" />
                             </div>
 
                             <div className="min-w-0 flex-1">
@@ -50,9 +50,9 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }: { order: MyOrder 
                                 </div>
                             </div>
                         </div>
-                    )
+                    );
                 })}
-                
+
                 <div className="my-4 border-t" />
                 <div className="flex items-end justify-between gap-4">
                     <div>
@@ -62,11 +62,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }: { order: MyOrder 
                         </div>
                     </div>
 
-                    <Button className="h-10 rounded-full bg-red-600 px-6 text-white hover:bg-red-700">
+                    <Button  className="h-10 rounded-full bg-red-600 px-6 text-white hover:bg-red-700" onClick={() => setOpen(true)}>
                         Give Review
                     </Button>
                 </div>
             </CardContent>
-        </Card>
+        </Card><ReviewDialog
+                open={open}
+                onOpenChange={setOpen}
+                transactionId={order.transactionId}
+                restaurantId={order.restaurants[0].restaurant.id}
+                menuIds={order.restaurants[0].items.map((it) => it.menuId)} /></>
     );
 }

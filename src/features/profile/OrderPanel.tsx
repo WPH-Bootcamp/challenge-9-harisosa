@@ -56,7 +56,6 @@ export const OrdersPanel: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      {/* Search */}
       <div className="relative">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-50" />
         <Input
@@ -66,8 +65,6 @@ export const OrdersPanel: React.FC = () => {
           className="h-10 rounded-full pl-9"
         />
       </div>
-
-      {/* Status */}
       <div className="flex items-center gap-3">
         <div className="text-sm font-semibold">Status</div>
         <div className="flex flex-1 flex-wrap gap-2">

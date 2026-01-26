@@ -11,6 +11,7 @@ import { useUpdateProfile } from "@/services/queries/useUpdateProfile";
 import { toast } from "sonner";
 import { updateAddress } from "../auth/auth.slice";
 import { useDispatch } from "react-redux";
+import { Textarea } from "@/ui/textarea";
 
 type FormState = {
   name: string;
@@ -25,7 +26,7 @@ export function EditProfileForm({
   initialEmail = "",
   initialPhone = "",
   initialAvatarUrl,
-  initialAddress ="",
+  initialAddress = "",
 }: {
   initialName?: string;
   initialEmail?: string;
@@ -38,7 +39,7 @@ export function EditProfileForm({
     email: initialEmail,
     phone: initialPhone,
     avatarFile: null,
-    address : initialAddress,
+    address: initialAddress,
   });
 
   const dispatch = useDispatch()
@@ -52,21 +53,21 @@ export function EditProfileForm({
   }, [form.avatarFile, initialAvatarUrl]);
 
 
-async function onSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setErr(null);
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErr(null);
     await mutateAsync({
       name: form.name || undefined,
       email: form.email || undefined,
       phone: form.phone || undefined,
-      avatar: form.avatarFile, 
+      avatar: form.avatarFile,
       address: form.address
     });
 
-          dispatch(
-            updateAddress(form.address)
-          )
-}
+    dispatch(
+      updateAddress(form.address)
+    )
+  }
 
   return (
     <Card className="rounded-2xl">
@@ -169,9 +170,9 @@ async function onSubmit(e: React.FormEvent) {
                 placeholder="08xxxxxxxxxx"
               />
             </div>
-                        <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="phone">Address</Label>
-              <Input
+              <Textarea
                 id="address"
                 value={form.address}
                 onChange={(e) =>
@@ -181,7 +182,7 @@ async function onSubmit(e: React.FormEvent) {
               />
             </div>
 
-            
+
           </div>
 
           {err && (

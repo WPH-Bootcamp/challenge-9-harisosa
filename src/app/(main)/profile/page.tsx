@@ -1,0 +1,88 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/ui/sheet";
+
+import {
+  Menu,
+} from "lucide-react"
+import { OrdersPanel } from "@/features/profile/OrderPanel";
+import { TabKey } from "@/features/profile/profile.type";
+import { Sidebar } from "@/features/profile/Sidebar";
+import { useSelector } from "react-redux";
+import { selectAddress, selectUser } from "@/features/auth/auth.selector";
+import { EditProfileForm } from "@/features/profile/EditProfile";
+import { useSearchParams } from "next/navigation";
+import { useAppDispatch } from "@/features/store/hook";
+import { clearSession } from "@/features/auth/auth.slice";
+
+
+export default function ProfilePage() {
+  const dispatch = useAppDispatch();
+  const sp = useSearchParams();
+  const [tab, setTab] = useState<TabKey>("profile");
+  const tabFromUrl = useMemo<TabKey>(() => {
+    const t = sp.get("tab");
+    return t === "orders" ? "orders" : "profile";
+  }, [sp]);
+
+  useEffect(() => {
+    setTab(tabFromUrl);
+  }, [tabFromUrl]);
+
+
+  const onSelectTab = (key :TabKey) => {
+    if(key === 'logout') {
+      dispatch(clearSession());
+      return;
+    }
+
+    setTab(key)
+  }
+
+
+  const user = useSelector(selectUser);
+  const address = useSelector(selectAddress);
+  return (
+    <main className="mx-auto w-full max-w-6xl px-4 py-8 md:px-6">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+          Profile
+        </h1>
+
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="rounded-xl">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[320px]">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <Sidebar active={tab} onSelect={onSelectTab} user={user} />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
+        <aside className="hidden md:block">
+          <Sidebar active={tab} onSelect={onSelectTab} user={user} />
+        </aside>
+
+        <section>{tab === "profile" ? <EditProfileForm initialName={user?.name} initialEmail={user?.email} initialPhone={user?.phone} initialAddress={address ?? ''} /> : <OrdersPanel />}</section>
+      </div>
+    </main>
+  );
+}

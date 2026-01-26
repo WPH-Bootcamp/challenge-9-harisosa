@@ -2,7 +2,6 @@
 
 import { CartGroup } from "@/components/CartGroup";
 import { selectAddress, selectPhone } from "@/features/auth/auth.selector";
-import { selectCurrentRestaurantId } from "@/features/cart/store";
 import { BankOption, PaymentMethod } from "@/features/checkout/BankOption";
 import { DeliveryAddressCard } from "@/features/checkout/DeliveryAddress";
 import { useCheckoutSummary } from "@/features/checkout/hook/useCheckoutSummary";

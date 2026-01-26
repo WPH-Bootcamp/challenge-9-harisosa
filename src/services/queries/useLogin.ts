@@ -6,6 +6,7 @@ import { ApiResponse } from "@/types/api";
 import { parseFieldErrors } from "@/lib/parseFieldErrors";
 import { setSession } from "@/features/auth/auth.slice";
 import { login } from "../api/auth";
+import { toast } from "sonner";
 
 
 
@@ -25,10 +26,11 @@ export function useLogin() {
           token: res.data.token,
         })
       );
-
+      toast.success("Login Sucessfull")
       router.push("/");
     },
     onError: (err) => {
+      toast.error(`Login Failed:,${err?.message}`)
       parseFieldErrors(err);
     },
   });

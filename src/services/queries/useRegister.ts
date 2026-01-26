@@ -10,6 +10,7 @@ import { mapAuthFieldErrorsToErrors, parseFieldErrors } from "../../lib/parseFie
 
 import type { ApiResponse } from "@/types/api";
 import type { AuthData, Errors, RegisterPayload } from "../../types/auth";
+import { toast } from "sonner";
 
 type SetErrors = React.Dispatch<React.SetStateAction<Errors>>;
 
@@ -31,17 +32,18 @@ export function useRegister(setErrors: SetErrors) {
       if (!res.success) {
         setErrors((prev) => ({
           ...prev,
-          form: res.message || "Register gagal",
+          form: res.message || "Register Failed",
         }));
         return false;
       }
 
       dispatch(setSession({ user: res.data.user, token: res.data.token }));
       router.push("/");
+      toast.success("Register Sucessfull")
       return true;
     } catch (err) {
       const { fieldErrors, formError } = parseFieldErrors(err);
-
+       toast.error("Register Failed")
       setErrors((prev) => ({
         ...prev,
         ...mapAuthFieldErrorsToErrors(fieldErrors),
@@ -50,6 +52,7 @@ export function useRegister(setErrors: SetErrors) {
 
       return false;
     }
+    
   };
 
   return {

@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { User2, Upload } from "lucide-react";
 import { Label } from "@/ui/label";
 import { useUpdateProfile } from "@/services/queries/useUpdateProfile";
-import { toast } from "sonner";
 import { updateAddress } from "../auth/auth.slice";
 import { useDispatch } from "react-redux";
 import { Textarea } from "@/ui/textarea";

@@ -26,7 +26,6 @@ const authSlice = createSlice({
     },
     updateAddress: (state, action: PayloadAction<string | null>) => {
       if (!state.user) return;
-      console.log(action.payload);
       state.user.address = action.payload ?? "";
 
     },

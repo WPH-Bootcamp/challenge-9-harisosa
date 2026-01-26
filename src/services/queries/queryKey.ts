@@ -34,16 +34,18 @@ export const queryKeys = {
 
   checkout: {
     all: () => [...queryKeys.all, "checkout"] as const,
-    last: () =>
-      [...queryKeys.checkout.all(), "last-transaction"] as const,
+    last: () => [...queryKeys.checkout.all(), "last-transaction"] as const,
     transaction: (transactionId: string) =>
       [...queryKeys.checkout.all(), "transaction", transactionId] as const,
   },
 
   cart: {
     all: () => [...queryKeys.all, "cart"] as const,
-    detail: () => [...queryKeys.cart.all(), "detail"] as const,
+    detail: () => [...queryKeys.cart.all(), "detail"] as const, // GET ALL cart
+    byRestaurant: (restaurantId: number | string) =>
+      [...queryKeys.cart.all(), "by-restaurant", restaurantId] as const,
   },
+
   auth: {
     all: () => [...queryKeys.all, "auth"] as const,
     profile: () => [...queryKeys.auth.all(), "profile"] as const,

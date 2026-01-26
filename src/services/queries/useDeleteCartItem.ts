@@ -8,7 +8,7 @@ export function useDeleteCartItem() {
   return useMutation({
     mutationFn: (cartItemId: number) => cartApi.deleteItem(cartItemId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.cart.all() });
+      qc.invalidateQueries({ queryKey: queryKeys.cart.detail() });
     },
   });
 }

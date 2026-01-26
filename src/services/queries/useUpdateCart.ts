@@ -9,8 +9,7 @@ export function useUpdateCartQuantity() {
     mutationFn: (args: { cartItemId: number; quantity: number }) =>
       cartApi.updateQuantity(args.cartItemId, { quantity: args.quantity }),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.cart.all() });
+      qc.invalidateQueries({ queryKey: queryKeys.cart.detail() });
     },
   });
 }
-

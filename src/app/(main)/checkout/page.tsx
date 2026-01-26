@@ -2,6 +2,7 @@
 
 import { CartGroup } from "@/components/CartGroup";
 import { selectAddress, selectPhone } from "@/features/auth/auth.selector";
+import { selectCurrentRestaurantId } from "@/features/cart/store";
 import { BankOption, PaymentMethod } from "@/features/checkout/BankOption";
 import { DeliveryAddressCard } from "@/features/checkout/DeliveryAddress";
 import { useCheckoutSummary } from "@/features/checkout/hook/useCheckoutSummary";
@@ -40,10 +41,10 @@ export default function CheckoutPage() {
   const onBuy = () => {
     const deliveryAddress = address ?? "";
     const phoneNumber = phone ?? "";
-    console.log(items)
     if (!phoneNumber) return;
 
     const payload: CheckoutPayload = {
+      restaurantId:restaurantId,
       restaurants: [
         {
           restaurantId,
@@ -59,7 +60,7 @@ export default function CheckoutPage() {
     };
 
     checkout.mutate(payload, {
-      onSuccess: () => router.push("/checkout/success"),
+      onSuccess: () => router.push("/invoice"),
     });
   };
 

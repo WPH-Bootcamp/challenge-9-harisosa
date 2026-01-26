@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { ApiResponse } from "./api";
 import { Restaurant } from "./restaurant";
 
@@ -79,3 +80,5 @@ export const cartInitData = () : GetCartRawResponse => {
     }
   )
 }
+
+export type CartQueryData = AxiosResponse<GetCartRawResponse>;

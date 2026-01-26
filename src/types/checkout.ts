@@ -20,6 +20,7 @@ export type CheckoutRestaurantInput = {
 
 export type CheckoutPayload = DeliveryContact &
   PaymentInfo & {
+    restaurantId: number;
     restaurants: CheckoutRestaurantInput[];
     notes?: string;
   };

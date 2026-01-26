@@ -25,11 +25,18 @@ export const queryKeys = {
     detail: (id: number | string) =>
       [...queryKeys.all, "detail", id] as const,
   },
-
   orders: {
     all: () => [...queryKeys.all, "orders"] as const,
     history: (userId: string) =>
       [...queryKeys.orders.all(), "history", userId] as const,
+
+
+    myOrder: (params: {
+      status: string;
+      page: number;
+      limit: number;
+    }) =>
+      [...queryKeys.orders.all(), "my-order", params] as const,
   },
 
   checkout: {
@@ -38,10 +45,13 @@ export const queryKeys = {
     transaction: (transactionId: string) =>
       [...queryKeys.checkout.all(), "transaction", transactionId] as const,
   },
-
   cart: {
     all: () => [...queryKeys.all, "cart"] as const,
-    detail: () => [...queryKeys.cart.all(), "detail"] as const, // GET ALL cart
+
+    // GET ALL cart (single source of truth)
+    detail: () => [...queryKeys.cart.all(), "detail"] as const,
+
+    // derived view (optional)
     byRestaurant: (restaurantId: number | string) =>
       [...queryKeys.cart.all(), "by-restaurant", restaurantId] as const,
   },

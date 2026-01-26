@@ -79,7 +79,7 @@ export default function CheckoutSuccessPage() {
               asChild
               className="mt-6 h-12 w-full rounded-full bg-red-600 text-white hover:bg-red-700"
             >
-              <Link href="/profile">See My Orders</Link>
+              <Link href="/profile?tab=orders">See My Orders</Link>
             </Button>
           </CardContent>
         </Card>

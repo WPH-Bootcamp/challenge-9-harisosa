@@ -99,7 +99,7 @@ export const AuthedNav: React.FC<AuthedNavProps> = ({ isNavbarWhite }) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href="/orders" className="flex items-center gap-2">
+            <Link href="/profile?tab=orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               Orders
             </Link>

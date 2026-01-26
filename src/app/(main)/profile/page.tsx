@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 import { Card, CardContent } from "@/ui/card";
@@ -23,12 +23,25 @@ import { Sidebar } from "@/features/profile/Sidebar";
 import { useSelector } from "react-redux";
 import { selectAddress, selectUser } from "@/features/auth/auth.selector";
 import { EditProfileForm } from "@/features/profile/EditProfile";
+import { useSearchParams } from "next/navigation";
 
 
 export default function ProfilePage() {
+
+  const sp = useSearchParams();
   const [tab, setTab] = useState<TabKey>("profile");
-    const user = useSelector(selectUser);
-    const address = useSelector(selectAddress);
+  const tabFromUrl = useMemo<TabKey>(() => {
+    const t = sp.get("tab");
+    return t === "orders" ? "orders" : "profile";
+  }, [sp]);
+
+  useEffect(() => {
+    setTab(tabFromUrl);
+  }, [tabFromUrl]);
+
+
+  const user = useSelector(selectUser);
+  const address = useSelector(selectAddress);
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 md:px-6">
       <div className="mb-6 flex items-center justify-between">
@@ -48,7 +61,7 @@ export default function ProfilePage() {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-4">
-                <Sidebar active={tab} onSelect={setTab} user={user}/>
+                <Sidebar active={tab} onSelect={setTab} user={user} />
               </div>
             </SheetContent>
           </Sheet>
@@ -57,10 +70,10 @@ export default function ProfilePage() {
 
       <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
         <aside className="hidden md:block">
-          <Sidebar active={tab} onSelect={setTab} user={user}/>
+          <Sidebar active={tab} onSelect={setTab} user={user} />
         </aside>
 
-        <section>{tab === "profile" ? <EditProfileForm initialName={user?.name} initialEmail={user?.email} initialPhone={user?.phone} initialAddress={address ?? ''}/> : <OrdersPanel />}</section>
+        <section>{tab === "profile" ? <EditProfileForm initialName={user?.name} initialEmail={user?.email} initialPhone={user?.phone} initialAddress={address ?? ''} /> : <OrdersPanel />}</section>
       </div>
     </main>
   );

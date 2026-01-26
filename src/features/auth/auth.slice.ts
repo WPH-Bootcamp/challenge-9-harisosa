@@ -1,31 +1,37 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthData } from "../../types/auth";
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AuthData } from '../../types/auth'
-
+type UpdateUserPayload = Partial<NonNullable<AuthData["user"]>>;
 
 const initialState: AuthData = {
   user: null,
   token: null,
-}
+};
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setSession: (state, action: PayloadAction<AuthData>) => {
-      state.user = action.payload.user
-      state.token = action.payload.token
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
     clearSession: (state) => {
-      state.user = null
-      state.token = null
+      state.user = null;
+      state.token = null;
     },
-  setAddress: (state, action: PayloadAction<string | null>) => {
-        if (!state.user) return; // belum login
-        state.user.address = action.payload ?? '';
-      },
-  },
-})
+    updateUser: (state, action: PayloadAction<UpdateUserPayload>) => {
+      if (!state.user) return;
+      state.user = { ...state.user, ...action.payload };
+    },
+    updateAddress: (state, action: PayloadAction<string | null>) => {
+      if (!state.user) return;
+      console.log(action.payload);
+      state.user.address = action.payload ?? "";
 
-export const { setSession, clearSession } = authSlice.actions
-export default authSlice.reducer
+    },
+  },
+});
+
+export const { setSession, clearSession, updateUser, updateAddress } = authSlice.actions;
+export default authSlice.reducer;

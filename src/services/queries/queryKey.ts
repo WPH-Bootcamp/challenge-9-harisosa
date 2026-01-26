@@ -44,4 +44,8 @@ export const queryKeys = {
     all: () => [...queryKeys.all, "cart"] as const,
     detail: () => [...queryKeys.cart.all(), "detail"] as const,
   },
+  auth: {
+    all: () => [...queryKeys.all, "auth"] as const,
+    profile: () => [...queryKeys.auth.all(), "profile"] as const,
+  },
 } as const;

@@ -9,3 +9,11 @@ export type User = {
   createdAt: string;
   address: string;
 };
+
+export type UpdateProfileInput = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  avatar?: File | null;
+  address: string;
+};

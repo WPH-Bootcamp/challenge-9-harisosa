@@ -73,17 +73,13 @@ function FooterList({
 export function Footer() {
   return (
     <footer className="bg-[#070A0F] text-white">
-      {/* glow background */}
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -left-40 -top-40 h-130 w-130 rounded-full bg-white/10 blur-3xl opacity-20" />
           <div className="absolute -right-45 -top-55 h-140 w-140 rounded-full bg-white/10 blur-3xl opacity-15" />
         </div>
-
         <div className="relative mx-auto max-w-6xl px-6 py-16">
-          {/* DESKTOP: 3 columns */}
           <div className="hidden md:grid grid-cols-12 gap-10">
-            {/* brand */}
             <div className="col-span-5 space-y-6">
               <div className="flex items-center gap-3">
                 <Flame className="h-8 w-8 text-red-500" />
@@ -114,18 +110,15 @@ export function Footer() {
               </div>
             </div>
 
-            {/* explore */}
             <div className="col-span-3">
               <FooterList title="Explore" items={exploreLinks} />
             </div>
 
-            {/* help */}
             <div className="col-span-4">
               <FooterList title="Help" items={helpLinks} />
             </div>
           </div>
 
-          {/* MOBILE: stacked brand then 2 columns list */}
           <div className="md:hidden space-y-10">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
@@ -162,8 +155,6 @@ export function Footer() {
               <FooterList title="Help" items={helpLinks} />
             </div>
           </div>
-
-          {/* bottom thin line (optional) */}
           <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/50">
             © {new Date().getFullYear()} Foody. All rights reserved.
           </div>

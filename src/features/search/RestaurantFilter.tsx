@@ -26,12 +26,9 @@ export const RestaurantFilter: React.FC<RestaurantFilterProps> = ({
   onChange,
   variant = "panel",
 }) => {
-  /** ---------- derived state ---------- */
   const ratingSet = useMemo(() => {
     return new Set<number>(value.ratings);
   }, [value.ratings]);
-
-  /** ---------- handlers ---------- */
   const toggleRating = (rating: number) => {
     const next = new Set<number>(ratingSet);
 
@@ -68,14 +65,12 @@ export const RestaurantFilter: React.FC<RestaurantFilterProps> = ({
     });
   };
 
-  /** ---------- UI content ---------- */
   const content = (
     <>
       {variant === "panel" && (
         <div className="text-sm font-semibold tracking-wide">FILTER</div>
       )}
 
-      {/* Distance */}
       <div className={variant === "panel" ? "mt-4 space-y-3" : "space-y-3"}>
         <div className="text-sm font-semibold">Distance</div>
 
@@ -100,7 +95,6 @@ export const RestaurantFilter: React.FC<RestaurantFilterProps> = ({
 
       <Separator className="my-6" />
 
-      {/* Price */}
       <div className="space-y-3">
         <div className="text-sm font-semibold">Price</div>
 
@@ -136,8 +130,6 @@ export const RestaurantFilter: React.FC<RestaurantFilterProps> = ({
       </div>
 
       <Separator className="my-6" />
-
-      {/* Rating */}
       <div className="space-y-3">
         <div className="text-sm font-semibold">Rating</div>
 
@@ -161,8 +153,6 @@ export const RestaurantFilter: React.FC<RestaurantFilterProps> = ({
       </div>
     </>
   );
-
-  /** ---------- layout ---------- */
   if (variant === "sheet") {
     return <div className="p-6">{content}</div>;
   }

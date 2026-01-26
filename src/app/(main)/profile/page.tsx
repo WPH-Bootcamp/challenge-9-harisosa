@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { cn } from "@/lib/utils";
-
-import { Card, CardContent } from "@/ui/card";
 import { Button } from "@/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import {
   Sheet,
   SheetContent,
@@ -24,10 +20,12 @@ import { useSelector } from "react-redux";
 import { selectAddress, selectUser } from "@/features/auth/auth.selector";
 import { EditProfileForm } from "@/features/profile/EditProfile";
 import { useSearchParams } from "next/navigation";
+import { useAppDispatch } from "@/features/store/hook";
+import { clearSession } from "@/features/auth/auth.slice";
 
 
 export default function ProfilePage() {
-
+  const dispatch = useAppDispatch();
   const sp = useSearchParams();
   const [tab, setTab] = useState<TabKey>("profile");
   const tabFromUrl = useMemo<TabKey>(() => {
@@ -38,6 +36,16 @@ export default function ProfilePage() {
   useEffect(() => {
     setTab(tabFromUrl);
   }, [tabFromUrl]);
+
+
+  const onSelectTab = (key :TabKey) => {
+    if(key === 'logout') {
+      dispatch(clearSession());
+      return;
+    }
+
+    setTab(key)
+  }
 
 
   const user = useSelector(selectUser);
@@ -61,7 +69,7 @@ export default function ProfilePage() {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-4">
-                <Sidebar active={tab} onSelect={setTab} user={user} />
+                <Sidebar active={tab} onSelect={onSelectTab} user={user} />
               </div>
             </SheetContent>
           </Sheet>
@@ -70,7 +78,7 @@ export default function ProfilePage() {
 
       <div className="grid gap-6 md:grid-cols-[320px_1fr] md:items-start">
         <aside className="hidden md:block">
-          <Sidebar active={tab} onSelect={setTab} user={user} />
+          <Sidebar active={tab} onSelect={onSelectTab} user={user} />
         </aside>
 
         <section>{tab === "profile" ? <EditProfileForm initialName={user?.name} initialEmail={user?.email} initialPhone={user?.phone} initialAddress={address ?? ''} /> : <OrdersPanel />}</section>

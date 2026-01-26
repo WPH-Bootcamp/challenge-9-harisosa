@@ -1,7 +1,6 @@
 "use client";
 
 import { Restaurant } from "@/types/restaurant";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";

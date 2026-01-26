@@ -1,8 +1,8 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/services/queries/queryKey";
-import { CheckCircle, CheckCircle2 } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 
 import { Card, CardContent } from "@/ui/card";
@@ -23,7 +23,6 @@ export default function CheckoutSuccessPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <div className="mb-6 flex items-center justify-center gap-2">
                     <Image
                       src='/images/logo-color.svg'
@@ -48,8 +47,6 @@ export default function CheckoutSuccessPage() {
             <p className="mt-1 text-center text-sm text-muted-foreground">
               Your payment has been successfully processed.
             </p>
-
-            {/* Invoice */}
             <div className="mt-6 space-y-3 text-sm">
               <LabelValue label="Date" value={dateFormatter(transaction.createdAt)} />
               <LabelValue label="Payment Method" value={transaction.paymentMethod} />

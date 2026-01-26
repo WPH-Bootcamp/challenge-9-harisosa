@@ -1,15 +1,10 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 import { Card, CardContent } from "@/ui/card";
-import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
-import { currencyFormatter } from "@/lib/currencyFormatter";
-
 import { type OrderStatusApi, type MyOrdersParams, type MyOrder, ORDER_STATUS_OPTIONS } from "@/types/order";
 import { useMyOrders } from "@/services/queries/useMyOrder";
 import { PaginationBar } from "@/ui/pagination-bar";
@@ -114,16 +109,18 @@ export const OrdersPanel: React.FC = () => {
           </Card>
         )}
       </div>
+      {filtered.length !== 0 && (
+        <PaginationBar
+          page={page}
+          totalPages={totalPages}
+          canPrev={canPrev}
+          canNext={canNext}
+          isLoading={isLoading}
+          onPrev={() => setPage((p) => Math.max(1, p - 1))}
+          onNext={() => setPage((p) => p + 1)}
+        />
+      )}
 
-  <PaginationBar
-    page={page}
-    totalPages={totalPages}
-    canPrev={canPrev}
-    canNext={canNext}
-    isLoading={isLoading}
-    onPrev={() => setPage((p) => Math.max(1, p - 1))}
-    onNext={() => setPage((p) => p + 1)}
-  />
     </div>
   );
 };
